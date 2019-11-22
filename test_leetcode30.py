@@ -18,3 +18,40 @@
 链接：https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
+
+
+def findSubstring(s: str, words: list) -> list:
+    if not s or not words:
+        return []
+    n = len(s)
+    x = len(words[0])
+    m = len(words)*x
+    words_dict = {}
+    ans = []
+    for j in range(len(words)):
+        if words[j] in words_dict:
+            words_dict[words[j]] += 1
+        else:
+            words_dict[words[j]] = 1
+    for i in range(0, n-m+2):
+        if s[i:i+x] in words:
+            if ok(s[i:i+m],x) == words_dict:
+                ans.append(i)
+    return ans
+
+
+def ok(a:str,num:int) -> dict:
+    temp_dict = {}
+    for i in range(0,len(a),num):
+        if a[i:i+num] in temp_dict:
+            temp_dict[a[i:i+num]] += 1
+        else:
+            temp_dict[a[i:i+num]] = 1
+    return temp_dict
+
+
+if __name__ == '__main__':
+    ss = "barfoofoobarthefoobarman"
+
+    ww = ["bar","foo","the"]
+    print(findSubstring(ss, ww))
