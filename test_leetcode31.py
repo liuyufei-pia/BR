@@ -13,34 +13,36 @@
 
 
 def nextPermutation(nums: list):
-    j = 1
-    temp = 0
-    temp_m = 0
-    n = 0
-    for i in range(1,len(nums)):
-        if nums[i] > nums[i-1]:
-            temp = nums[i-1]
-            n = i-1
-            p = i
-            temp_m = nums[i]
-        else:
-            if temp and (nums[i] > temp) and (nums[i]<temp_m):
-                p = i
-                temp_m = nums[i]
-    if temp_m:
-        a = nums[n]
-        nums[n] = nums[p]
-        nums[p] = a
-    for m in range(n+1,(len(nums)-n-1)//2+n-1):   # 这儿是错误的，需要改正
-        a = nums[m]
-        nums[m] = nums[len(nums)-(m-n-1)-1]
-        nums[len(nums)-(m-n-1)-1] = a
+    first = -1
+    n = len(nums)
+
+    # 定义排序函数，后边用得到
+    def reverse(nums, i, j):
+        while i < j:
+            nums[i], nums[j] = nums[j], nums[i]
+            i += 1
+            j -= 1
+
+    # 找到第一个i小于i+1的数
+    for i in range(n - 2, -1, -1):
+        if nums[i] < nums[i + 1]:
+            first = i
+            break
+    # 如果没找到，倒序
+    if first == -1:
+        reverse(nums, 0, n - 1)
+        return
+    second = -1
+    # 找到第一个比num[first]大的数nums【second】
+    for i in range(n - 1, first, -1):
+        if nums[i] > nums[first]:
+            second = i
+            break
+    nums[first], nums[second] = nums[second], nums[first]
+    reverse(nums, first + 1, n - 1)
     print(nums)
 
 
-
-
-
 if __name__ == '__main__':
-    a = [7,6,5,4,3,2,1]
+    a = [1,2,8,7,6,5,4,3,1]
     nextPermutation(a)
